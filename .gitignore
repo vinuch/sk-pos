@@ -34,3 +34,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+# Ignore environment variables
+.env
+
+# Ignore database dumps
+supabase/*.sql
+
+# Ignore IDE configuration (optional, based on preference)
+.vscode/
