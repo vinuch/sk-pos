@@ -3,18 +3,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { DataTable } from "./order-table";
 import { columns } from "./columns";
 import { useEffect, useState } from "react";
+import { useOrders } from "@/context/OrdersContext";
 
-type OrderTabsProps = {
-    orders: any[] | null
-}
 export type OrderData = {
     id: any;
     amount: any;
     status: string;
     order: any;
 }
-export function OrderTabs({ orders }: OrderTabsProps) {
+export function OrderTabs() {
     const [data, setData] = useState<OrderData[]>([]);
+    const { orders } = useOrders();
+
 
     useEffect(() => {
         if (orders) {

@@ -1,25 +1,32 @@
-import Image from "next/image";
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Payment, columns } from "./home/columns";
-import { getMenuItems, getOrders, getProteins, getSwallows } from "@/utils/supabase/queries";
-import { createClient } from "@/utils/supabase/server";
 
+import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Payment, columns } from "./home/columns";
+import { OrdersProvider } from "@/context/OrdersContext"; // Import the provider
+import {
+  getMenuItems,
+  getOrders,
+  getProteins,
+  getSwallows,
+} from "@/utils/supabase/queries";
+import { createClient } from "@/utils/supabase/server";
 
 import { NewOrder } from "./home/NewOrder";
 import { OrderTabs } from "./home/OrderTabs";
-
+import { useEffect } from "react";
+import Navbar from "./components/Navbar";
 
 export default async function Home() {
+
   const supabase = createClient();
   const [menuItems, swallows, proteins, orders] = await Promise.all([
     getMenuItems(supabase),
     getSwallows(supabase),
     getProteins(supabase),
     getOrders(supabase),
-  ])
+  ]);
 
-  console.log(menuItems)
   // const data: Payment[] = [
   //   {
   //     id: "728ed52f",
@@ -37,36 +44,28 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen">
-      <nav className="flex justify-between z-50 sticky top-0 bg-black text-white p-3">
-        <h2>SK POS</h2>
+      <OrdersProvider>
+      <Navbar />
 
-        <ul className="flex gap-2">
-          {/* <li>Home</li>
-          <li>Menu</li> */}
-          {/* <li>Account</li> */}
-        </ul>
-      </nav>
+      
 
       <div className="p-3">
         <div className=" py-12">
           <Input placeholder="Search menu item " />
-
-
-
-
-
-          <NewOrder menuItems={menuItems} swallows={swallows} proteins={proteins} />
-
-
-
+          <NewOrder
+            menuItems={menuItems}
+            swallows={swallows}
+            proteins={proteins}
+          />
         </div>
 
         <div>
           <div className="flex justify-center items-center">
-            <OrderTabs orders={orders} />
+            <OrderTabs />
           </div>
         </div>
       </div>
+      </OrdersProvider>
     </main>
   );
 }

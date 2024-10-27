@@ -53,12 +53,15 @@ export function DataTable<TData, TValue>({
   useEffect(() => {
     async function getOrderItems() {
 
-      const { data } = await supabase
+      if(selectedOrder) {
+          const { data } = await supabase
         .from("OrderItems")
         .select("*")
         .eq('order_id', selectedOrder ? selectedOrder.id : '')
 
       setSelectedOrderItems(data);
+      }
+    
     }
 
     getOrderItems();

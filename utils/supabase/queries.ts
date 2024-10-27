@@ -1,13 +1,20 @@
-import { OrderItem } from "@/app/home/NewOrder";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { cache } from "react";
+import { Database } from "@/utils/types/supabase";
+// Type aliases for easier access
+export type OrdersRow = Database['public']['Tables']['Orders']['Row'];
+
 
 export const getMenuItems = cache(async (supabase: SupabaseClient) => {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("MenuItems")
     .select("*")
     .neq("is_addon", "true");
 
+
+  if (error) {
+    console.error("Error fetching menu items:", error);
+  }
   return data;
 });
 export const getSwallows = cache(async (supabase: SupabaseClient) => {
@@ -33,7 +40,7 @@ export const getOrders = cache(async (supabase: SupabaseClient) => {
     .order('id', { ascending: false })
 
 
-  return data;
+  return data as OrdersRow[];
 });
 // export const getOrderItems = cache(async (supabase: SupabaseClient) => {
 //   const { data } = await supabase
