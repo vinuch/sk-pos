@@ -35,10 +35,10 @@ export const columns: ColumnDef<OrderData>[] = [
     header: "Status",
   },
   {
-    accessorKey: "order",
+    accessorKey: "order_summary",
     header: "Order",
     cell: ({ row }) => {
-      const order = String(row.getValue("order"))
+      const order = String(row.getValue("order_summary"))
 
 
       return <div className="w-36 md:w-6/12 flex items-center">
@@ -48,7 +48,7 @@ export const columns: ColumnDef<OrderData>[] = [
     },
   },
   {
-    accessorKey: "amount",
+    accessorKey: "total_amount",
     header: "Amount",
   },
 ]
