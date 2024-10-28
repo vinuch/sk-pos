@@ -10,17 +10,11 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Database } from "@/utils/types/supabase";
+export type MenuItemsInsert = Database['public']['Tables']['MenuItems']['Insert'];
 
 type EditMenuItemDialogProps = {
-  item: {
-    id: number;
-    name: string;
-    price: number;
-    type: string;
-    description: string;
-    isAddon: boolean;
-    servingAmount: number;
-  };
+  item: MenuItemsInsert;
   open: boolean;
   onClose: () => void;
 };
@@ -29,11 +23,11 @@ const EditMenuItemDialog = ({
   open,
   onClose,
 }: EditMenuItemDialogProps) => {
-  const [itemName, setItemName] = useState(item.name);
-  const [itemPrice, setItemPrice] = useState(item.price);
-  const [itemType, setItemType] = useState(item.type);
-  const [isAddon, setIsAddon] = useState(item.isAddon);
-  const [servingAmount, setServingAmount] = useState(item.servingAmount);
+  const [itemName, setItemName] = useState<string>(item.name || '');
+  const [itemPrice, setItemPrice] = useState<number>(item.price || 0);
+  const [itemType, setItemType] = useState< Database["public"]["Enums"]["Food_type"]>(item.type || 'soup');
+  const [isAddon, setIsAddon] = useState<boolean>(item.is_addon || false);
+  const [servingAmount, setServingAmount] = useState<number>(item.per_serving || 0);
 
   const handleEdit = (e: any) => {
     e.preventDefault();
@@ -85,7 +79,7 @@ const EditMenuItemDialog = ({
             <label className="block mb-1">Type:</label>
             <select
               value={itemType}
-              onChange={(e) => setItemType(e.target.value)}
+              onChange={(e) => setItemType(e.target.value as "soup" | "swallow" | "protein")}
               className="w-full border rounded px-2 py-1"
             >
               <option value="swallow">Swallow</option>

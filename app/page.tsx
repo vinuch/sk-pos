@@ -1,11 +1,10 @@
-
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Payment, columns } from "./home/columns";
 import { OrdersProvider } from "@/context/OrdersContext"; // Import the provider
 import {
-  getMenuItems,
+  getMenuItemsNonAddon,
   getOrders,
   getProteins,
   getSwallows,
@@ -18,10 +17,9 @@ import { useEffect } from "react";
 import Navbar from "./components/Navbar";
 
 export default async function Home() {
-
   const supabase = createClient();
   const [menuItems, swallows, proteins, orders] = await Promise.all([
-    getMenuItems(supabase),
+    getMenuItemsNonAddon(supabase),
     getSwallows(supabase),
     getProteins(supabase),
     getOrders(supabase),
@@ -45,26 +43,24 @@ export default async function Home() {
   return (
     <main className="min-h-screen">
       <OrdersProvider>
-      <Navbar />
+        <Navbar />
 
-      
+        <div className="p-3">
+          <div className=" py-12">
+            <Input placeholder="Search menu item " />
+            <NewOrder
+              menuItems={menuItems}
+              swallows={swallows}
+              proteins={proteins}
+            />
+          </div>
 
-      <div className="p-3">
-        <div className=" py-12">
-          <Input placeholder="Search menu item " />
-          <NewOrder
-            menuItems={menuItems}
-            swallows={swallows}
-            proteins={proteins}
-          />
-        </div>
-
-        <div>
-          <div className="flex justify-center items-center">
-            <OrderTabs />
+          <div>
+            <div className="flex justify-center items-center">
+              <OrderTabs />
+            </div>
           </div>
         </div>
-      </div>
       </OrdersProvider>
     </main>
   );

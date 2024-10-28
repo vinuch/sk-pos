@@ -3,17 +3,10 @@ import React, { useState } from 'react';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu'; // Adjust this import to match your setup
 import EditMenuItemDialog from './EditMenuItemDialog'; // Import the edit dialog component
 import { MoreVertical } from 'lucide-react'; // Ensure you have this import if you're using lucide for icons
+import { MenuItemsRow } from '@/context/MenuItemContext';
 
 type MenuItemCardProps ={
-  item : {
-    id: number;
-    name: string;
-    price: number;
-    type: string;
-    description: string;
-    isAddon: boolean;
-    servingAmount: number;
-};
+  item : MenuItemsRow;
 }
 const MenuItemCard = ({ item }: MenuItemCardProps) => {
   const [dialogOpen, setDialogOpen] = useState(false); // State to control dialog visibility
@@ -47,7 +40,7 @@ const MenuItemCard = ({ item }: MenuItemCardProps) => {
 
       <h3 className="text-lg mb-2">{item.name}</h3>
       <p className="text-gray-600">Description of the menu item goes here.</p>
-      <p className="mt-2 text-base font-medium">${item.price.toFixed(2)}</p>
+      <p className="mt-2 text-base font-medium">₦{(item.price ?? 0).toFixed(2)}</p>
     
      {/* Render the Edit Menu Item Dialog */}
      <EditMenuItemDialog 
