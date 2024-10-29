@@ -1,7 +1,7 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { OrderData } from "./OrderTabs"
+// import { OrderData } from "./OrderTabs"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
+import { OrdersRow } from "@/utils/supabase/queries"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Payment = {
@@ -29,16 +30,16 @@ export type Payment = {
   order: string
 }
 
-export const columns: ColumnDef<OrderData>[] = [
+export const columns: ColumnDef<OrdersRow>[] = [
   {
     accessorKey: "status",
     header: "Status",
   },
   {
-    accessorKey: "order",
+    accessorKey: "order_summary",
     header: "Order",
     cell: ({ row }) => {
-      const order = String(row.getValue("order"))
+      const order = String(row.getValue("order_summary"))
 
 
       return <div className="w-36 md:w-6/12 flex items-center">
@@ -48,7 +49,7 @@ export const columns: ColumnDef<OrderData>[] = [
     },
   },
   {
-    accessorKey: "amount",
+    accessorKey: "total_amount",
     header: "Amount",
   },
 ]

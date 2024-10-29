@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { createClient } from '@/utils/supabase/client';
+import { useToast } from '@/components/hooks/use-toast';
 
 type AddMenuItemDialogProps = {
   // onClose: () => void
@@ -10,14 +12,18 @@ type AddMenuItemDialogProps = {
 const AddMenuItemDialog = ({  }: AddMenuItemDialogProps) => {
   const [itemName, setItemName] = useState('');
   const [itemPrice, setItemPrice] = useState(0);
-  const [itemType, setItemType] = useState('swallow');
+  const [itemType, setItemType] = useState<"soup" | "swallow" | "protein" >('swallow');
   const [isAddon, setIsAddon] = useState(false);
   const [servingAmount, setServingAmount] = useState(1);
   const [open, setOpen] = useState(false); 
 
-  const handleSubmit = (e: any) => {
+  const supabase = createClient();
+  const {toast} = useToast();
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     // Handle adding the new menu item here
+
+
     console.log({
       itemName,
       itemPrice,
@@ -25,6 +31,25 @@ const AddMenuItemDialog = ({  }: AddMenuItemDialogProps) => {
       isAddon,
       servingAmount,
     });
+
+
+    const { data, error } = await supabase
+    .from("MenuItems")
+    .insert([{
+      name: itemName,
+      price: itemPrice,
+      type: itemType,
+      is_addon: isAddon,
+      per_serving: servingAmount,
+    }])
+  
+    if(error){
+
+    }else {
+      toast({
+        title: `Menu Item #${itemName} created successfully`,
+      })
+    }
 
     // Close the dialog after submission
     // onClose();
@@ -68,7 +93,7 @@ const AddMenuItemDialog = ({  }: AddMenuItemDialogProps) => {
             <label className="block mb-1">Type:</label>
             <select
               value={itemType}
-              onChange={(e) => setItemType(e.target.value)}
+              onChange={(e) => setItemType(e.target.value as "soup" | "swallow" | "protein")}
               className="w-full border rounded px-2 py-1"
             >
               <option value="swallow">Swallow</option>

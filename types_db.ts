@@ -101,7 +101,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      Food_type: "soup" | "swallow" | "protein(meat/fish)"
+      Food_type: "soup" | "swallow" | "protein"
     }
     CompositeTypes: {
       [_ in never]: never
